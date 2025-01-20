@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html class="h-100" data-bs-theme="auto">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <link href="/css/style.css" rel="stylesheet">
+
+    <title>Conetst-IT</title>
+</head>
+
+<body class="d-flex h-100 text-center text-dark" style="background-color: #aebec7;">
+
+    <!--навбар початок-->
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="mb-auto">
+            <div class="cover-container d-flex justify-content-between align-items-center">
+                <h3 class="text-dark mb-0">Contest-IT</h3>
+                <nav class="nav">
+                    <a class="nav-link text-dark" href="cover.html">Головна</a>
+                    <a class="nav-link text-dark" href="/php/news.php">Дописи</a>                   
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="accountDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Аккаунт
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="signup.html">Реєстрація</a></li>
+                            <li><a class="dropdown-item" href="signin.html">Вхід</a></li>
+                        </ul>
+                    </div>
+                    <a class="nav-link text-dark" href="about-dev.html">Про розробника</a>
+                </nav>
+            </div>
+        </header>
+        <hr>
+
+        <style>
+            .nav-link:hover, 
+            .nav-link:focus {
+                color: #007bff;
+                text-decoration: underline;
+            }
+            .dropdown-menu .dropdown-item:hover,
+            .dropdown-menu .dropdown-item:focus {
+                background-color: #e9ecef; 
+                color: #000;
+            }
+        </style>
+        <!--навбар кінець-->
+
+
+
+        <main class="px-3">
+            <h1 class="text-dark">Contest-IT</h1>
+            <p class="lead text-dark" style="font-size: 16pt;">Ласкаво просимо до Contest-IT: ваш шлях до перемоги в ІТ конкурсах для студентів. Подавайте
+                проекти, відкривайте таланти та беріть участь у конкурсах. Швидко, просто, ефективно.</p>
+        </main>
+
+        <!--2а частина-->
+
+        <style>
+            .custom-nav-link {
+                margin: 0 10px 0 10px;
+            }
+
+            .dropdown-menu .dropdown-item:hover,
+            .dropdown-menu .dropdown-item:focus {
+                color: #0077ff;
+            }
+
+            .carousel {
+                width: 100%;
+                margin-bottom: 4rem;
+            }
+
+            .carousel-caption {
+                bottom: 3rem;
+                z-index: 10;
+            }
+
+            .carousel-item {
+                height: 30rem;
+            }
+        </style>
+
+        <div id="myCarousel" class="carousel slide mb-auto" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            </div>
+            <style>
+                .carousel-item img {
+                    width: 100%;
+                    height: 500px; 
+                    object-fit: cover;
+                }
+                .carousel-caption {
+                    background: rgba(0, 0, 0, 0.5);
+                    width: 100%;
+                    padding: 20px;
+                }
+
+                .carousel-control-prev,
+                .carousel-control-next {
+                    filter: invert(1);
+                }
+            </style>
+            
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/assets/student.png" alt="Student Image">
+                    <div class="container">
+                        <div class="carousel-caption text-start">
+                            <h1>Ви учень?</h1>
+                            <p class="opacity-75">Приєднуйтеся до класів, беріть участь у конкурсах та вигравайте!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/assets/teacher.png" alt="Teacher Image">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Ви вчитель?</h1>
+                            <p>Створюйте власні класи, додавайте змагання на сайт і більше.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <!--можливість обрати тип аккаунта-->
+        <style>
+            .feature-icon-small {
+                width: 3rem;
+                height: 3rem;
+            }
+            
+            .text-body-emphasis,
+            .text-body-secondary {
+                color: rgb(0, 0, 0) !important;
+                text-align: left;
+            }
+
+            .container {
+                max-width: 40em;
+            }
+        </style>
+
+        <div class="container-fluid px-4 py-5">
+            <div class="row">
+                <h1 class="pb-2 border-bottom">Перелік головних можливостей</h2>
+
+                <!--аккаунт учня-->
+                <div class="col-md-6 d-flex flex-column border-end" style="padding: 2em;">
+                    <h2 class="pb-2 border-bottom">Можливості учня</h2>
+
+                    <!--content учня -->
+                    <div class="row row-cols-1 row-cols-md-1 align-items-md-center g-1 py-5">       
+                        <div class="col">
+                            <div class="row row-cols-1 row-cols-sm-2 g-4">
+                                <div class="col d-flex flex-column gap-2">
+                                    <div
+                                        class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                                        <img src="/assets/icons/competition.png" class="bi" width="40em" height="40em">
+                                    </div>
+                                    <h4 class="fw-semibold mb-0 text-body-emphasis">Змагання</h4>
+                                    <p class="text-body-secondary">Можливість взяти участь в змаганнях.
+                                    </p>
+                                </div>
+
+                                <div class="col d-flex flex-column gap-2">
+                                    <div
+                                        class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                                        <img src="/assets/icons/join.png" class="bi" width="40em" height="40em">
+                                    </div>
+                                    <h4 class="fw-semibold mb-0 text-body-emphasis">Класи (групи)</h4>
+                                    <p class="text-body-secondary">Можливість вступити до класів (групи).
+                                    </p>
+                                </div>
+
+                                <div class="col d-flex flex-column gap-2">
+                                    <div
+                                        class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                                        <img src="/assets/icons/send.png" class="bi" width="40em" height="40em">
+                                    </div>
+                                    <h4 class="fw-semibold mb-0 text-body-emphasis">Відправка робіт</h4>
+                                    <p class="text-body-secondary">Можливість подавати роботи на змагання (якщо вступили до класу).
+                                    </p>
+                                </div>
+
+                                <div class="col d-flex flex-column gap-2">
+                                    <div
+                                        class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                                        <img src="/assets/icons/scroll.png" class="bi" width="40em" height="40em">
+                                    </div>
+                                    <h4 class="fw-semibold mb-0 text-body-emphasis">Перегляд новин-дописів</h4>
+                                    <p class="text-body-secondary">Можливість переглядати новини-дописи інших користувачів.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                
+
+                <!--аккаунт вчителя-->
+                <div class="col-md-6" style="padding: 2em;">
+                    <h2 class="pb-2 border-bottom">Можливості вчителя</h2>
+                    
+                    <!--content вчителя -->
+                    <div class="row row-cols-1 row-cols-md-1 align-items-md-center g-1 py-5">
+        
+                        <div class="col">
+                            <div class="row row-cols-1 row-cols-sm-2 g-4">      
+                                <div class="col d-flex flex-column gap-2">
+                                    <div
+                                        class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                                        <img src="/assets/icons/add.png" class="bi" width="40em" height="40em">
+                                    </div>
+                                    <h4 class="fw-semibold mb-0 text-body-emphasis">Додавання та редагування змагань</h4>
+                                    <p class="text-body-secondary">Можливість додати на сайт змагання з ІТ або програмування. Можливість редагувати, видаляти змагання.
+                                    </p>
+                                </div>
+                                <div class="col d-flex flex-column gap-2">
+                                    <div
+                                        class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                                        <img src="/assets/icons/create.png" class="bi" width="40em" height="40em">
+                                    </div>
+                                    <h4 class="fw-semibold mb-0 text-body-emphasis">Створення класів</h4>
+                                    <p class="text-body-secondary">Можливість створити та керувати власними класами.
+                                    </p>
+                                </div>
+                                <div class="col d-flex flex-column gap-2">
+                                    <div
+                                        class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                                        <img src="/assets/icons/recieve.png" class="bi" width="40em" height="40em">
+                                    </div>
+                                    <h4 class="fw-semibold mb-0 text-body-emphasis">Завантаження робіт учнів</h4>
+                                    <p class="text-body-secondary">Можливість завантажити роботи учнів у класі.
+                                    </p>
+                                </div>
+                                <div class="col d-flex flex-column gap-2">
+                                    <div
+                                        class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                                        <img src="/assets/icons/pen.png" class="bi" width="40em" height="40em">
+                                    </div>
+                                    <h4 class="fw-semibold mb-0 text-body-emphasis">Створення, редагування дописів</h4>
+                                    <p class="text-body-secondary">Можливість створювати, редагувати та видаляти власні дописи-новини.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-auto text-dark-50">
+            <p class="mt-5 mb-3 text-dark">&copy; 2024 Contest-IT. Бабяк Олексій. Всі права захищені</p>
+        </footer>
+    </div>
+
+</body>
+
+</html>
