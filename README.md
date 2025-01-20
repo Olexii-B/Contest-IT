@@ -44,7 +44,7 @@ sudo mysql_secure_installation
 
 4) Клонування проєкту:
 ```
-git clone https://github.com/your-repo/contest-it.git
+git clone https://github.com/Olexii-B/Contest-IT.git
 ```
 
 5) Перемістіть файли у `/srv/http`:
@@ -104,7 +104,7 @@ mysql -u root -p < contest-it.sql
 
 2) Clone the project:
 ```
-git clone https://github.com/your-repo/contest-it.git
+git clone https://github.com/Olexii-B/Contest-IT.git
 ```
 
 3) Transfer the files to the htdocs directory (usually `C:\xampp\htdocs\`)
