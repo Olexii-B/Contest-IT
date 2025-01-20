@@ -52,12 +52,7 @@ git clone https://github.com/Olexii-B/Contest-IT.git
 sudo cp -r contest-it/* /srv/http/
 ```
 
-6) Імпортуйте базу даних через phpMyAdmin або CLI:
-```
-mysql -u root -p < contest-it.sql
-```
-
-7) Відкрийте браузер і введіть `http://localhost`
+6) Відкрийте браузер і введіть `http://localhost`
 
 
 ## Структура проєкту
