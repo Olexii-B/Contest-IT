@@ -71,16 +71,21 @@ sudo cp -r contest-it/* /srv/http/
 
 ### Для вчителів:
 - Керування конкурсами: Створюйте, редагуйте та видаляйте конкурси.
-- Класи: Додавайте учнів до класів для управління конкурсами.
-- Роботи учнів: Переглядайте та завантажуйте роботи учнів.
+- Класи: Додавайте учнів до класів для надання їм можливостей взяти участь в цьому конкурсі.
+- Роботи учнів: Переглядайте та завантажуйте на свій пристрій роботи учнів.
+- Новин-пости: Створюйте, редагуйте та видаляйте новини, коментуйте їх, та оцінюйте коментарі інших користувачів.
 
 ### Для учнів:
 - Участь у конкурсах: Вибирайте конкурс, ознайомлюйтеся з умовами і завантажуйте свої роботи.
 - Класи: Вступайте до класів, створених вчителями.
+- Роботи: Подавайте роботи на конкурси, завантажуючи їх у клас в який ви вступили.
+- Новин-пости: Переглядайте новини, коментуйте їх, та оцінюйте коментарі інших користувачів.
 
-### Для гостей:
-- Огляд: Переглядайте активні конкурси та новини без реєстрації.
+### Для гостей
+- Огляд: Переглядайте новини.
 
+### Для Адміністратора Веб-Сайта
+- Керуйте всією БД. Доступ до адмін панелі myphpadmin
 
 
 ## ENGLISH README
@@ -161,16 +166,20 @@ mysql -u root -p < contest-it.sql
 ```
 
 
-## Description of functionality.
-
 ### For teachers:
 - Manage contests: Create, edit, and delete contests.
-- Classes: Add students to classes to manage contests.
-- Student work: View and download student work.
+- Classes: Add students to classes to give them opportunities to participate in this competition.
+- Student work: View and download student work to your device.
+- News posts: Create, edit, and delete news items, comment on them, and rate other users' comments.
 
 ### For students:
-- Enter contests: Choose a contest, read the rules, and upload your work.
+- Participate in contests: Choose a competition, read the terms and conditions, and upload your work.
 - Classes: Join classes created by teachers.
+- Entries: Submit your work to contests by uploading it to the class you've joined.
+- News posts: View news posts, comment on them, and rate other users' comments.
 
-### For guests:
-- Overview: View active contests and news without registering.
+### For guests
+- Overview: View news stories.
+
+### For Website Administrator
+- Manage the entire database. Access to the myphpadmin admin panel
