@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="h-100" data-bs-theme="auto">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+		crossorigin="anonymous"></script>
+
+	<link href="/css/style.css" rel="stylesheet">
+
+	<title>Conetst-IT</title>
+</head>
+
+<body class="text-center text-black" style="background-color: #aebec7;">
+
+	<div class="cover-container d-flex w-100  mx-auto flex-column">
+
+		<!--навбар початок-->
+		<div class="cover-container d-flex w-100 p-3 mx-auto flex-column">
+			<header class="mb-auto">
+				<div class="cover-container d-flex justify-content-between align-items-center">
+					<h3 class="float-md-start mb-0 text-dark">Contest-IT для Учнів</h3>
+					<nav class="nav nav-masthead justify-content-center float-md-end">
+					  <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="competitions.html">Конкурси</a>
+					  <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="enter-class.html">Вступити в Клас</a>
+					  <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/php/news.php">Дописи</a>
+					  <div class="nav-item dropdown">
+						<a class="nav-link fw-bold py-1 px-0 custom-nav-link dropdown-toggle text-dark" href="#"
+						  id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						  Більше
+						</a>
+						<ul class="dropdown-menu">
+						  <li><a class="dropdown-item" href="#" onclick="logout()">Вийти</a></li>
+						</ul>              
+					  </div>
+					</nav>
+				</div>
+				<hr>
+			</header>
+
+
+			<style>
+				.nav-link:hover,
+				.nav-link:focus {
+					color: #007bff;
+					text-decoration: underline;
+				}
+
+				.dropdown-menu .dropdown-item:hover,
+				.dropdown-menu .dropdown-item:focus {
+					background-color: #e9ecef;
+					color: #000;
+				}
+			</style>
+		</div>
+		<!--навбар кінець-->
+
+		<div class="container"> <!--таблиця класів-->
+			<h2>Ваші приєднані класи</h2>
+
+			<!-- Повідомлення, якщо не приєднано жодного класу -->
+			<div id="noClassesMessage" style="display: none; text-align: center; margin-top: 20px;">
+				<p>Ви ще не приєдналися до жодного класу.</p>
+			</div>
+
+			<!-- Таблиця об'єднаних класів -->
+			<table class="table table-bordered" id="classesTable" style="display: none;">
+				<thead>
+					<tr>
+						<th>Код класу</th>
+						<th>Назва класу</th>
+						<th>Приєднався до</th>
+						<th>Дії</th>
+					</tr>
+				</thead>
+				<tbody id="classesTableBody">
+					<!-- Класи будуть заповнюватися тут динамічно -->
+				</tbody>
+			</table>
+		</div>
+
+		<style>
+			body{
+				display: flex;
+				flex-direction: column;
+				min-height: 100vh; /* Мінімальна висота для body */
+			}
+
+			.custom-nav-link {
+				margin: 0 10px 0 10px;
+			}
+
+			.dropdown-menu .dropdown-item:hover,
+			.dropdown-menu .dropdown-item:focus {
+				color: #0077ff;
+			}
+
+			.carousel {
+				width: 100%;
+				margin-bottom: 4rem;
+			}
+
+			.carousel-caption {
+				bottom: 3rem;
+				z-index: 10;
+			}
+
+			.carousel-item {
+				height: 45rem;
+			}
+		</style>
+
+
+		<script>
+			//обробник події, який спрацьовує після повного завантаження DOM
+			document.addEventListener("DOMContentLoaded", function () { 
+				
+				fetch('/php/getStudentClasses.php') //HTTP-запит до сервера для отримання класів студента
+					
+					//Перетворюємо відповідь сервера на формат JSON
+					.then(response => response.json())
+					//0бробляємо отримані дані
+					.then(data => {
+						//Отримуємо елемент, тіло таблиці класів за ID + елемент повідомлення про відсутність класів
+						const classesTable = document.getElementById("classesTable"); 
+						const classesTableBody = document.getElementById("classesTableBody");
+						const noClassesMessage = document.getElementById("noClassesMessage");
+
+						if (data.status === "success") { //чи статус відповіді - успішний
+							if (data.classes.length === 0) { //масив класів порожній
+								noClassesMessage.style.display = "block"; //повідомлення про відсутність класів
+								classesTable.style.display = "none"; //сховати таблицю класів
+							} else {
+								noClassesMessage.style.display = "none"; //сховати повідомлення ьа 
+								classesTable.style.display = "table"; //показати таблицю
+
+								classesTableBody.innerHTML = ""; //очистка тіла таблиці перед заповненням новими даними
+								data.classes.forEach(classData => { //перебір масиву класів
+									const row = document.createElement("tr"); //новий рядок таблиці
+
+									const codeCell = document.createElement("td"); //клітинка таблиці для коду класу
+									codeCell.textContent = classData.class_code; //додати код класу
+									row.appendChild(codeCell); //і додаєму клітинку з кодом до рядка
+
+									//так само клітинка для назви класу
+									const nameCell = document.createElement("td"); 
+									nameCell.textContent = classData.name;
+									row.appendChild(nameCell);
+
+									//клітинка для дати приєднання
+									const joinedAtCell = document.createElement("td");
+
+									//Форматування дати приєднання у локальний формат
+									joinedAtCell.textContent = new Date(classData.joined_at).toLocaleDateString();
+									row.appendChild(joinedAtCell);
+
+									//клітинка для дій, створення кнопки для доступа в клас
+									const actionsCell = document.createElement("td");
+									const accessButton = document.createElement("button");
+									accessButton.textContent = "відкрити клас";
+									accessButton.className = "btn btn-primary btn-sm"; //класи бутстрапа для стилів
+
+									//обробник подій для кнопки
+									accessButton.addEventListener("click", () => {
+										//перенаправлення на сторінку класу з ID класа у посиланні
+										window.location.href = `/php/class.php?id=${classData.id}`;
+									});
+									
+									//кнопку до клітинки, клітинку до рядка.
+									actionsCell.appendChild(accessButton);
+									row.appendChild(actionsCell);
+
+									//весь рядок, додати до тіла таблиці
+									classesTableBody.appendChild(row);
+								});
+							}
+						} else {
+							console.error("Не вдалося завантажити класи:", data.message);
+						}
+					})
+					.catch(error => {
+						console.error("Помилка зчитування класів:", error);
+					});
+			});
+		</script>
+
+
+
+		<div id="messageContainer">
+			<!--тут повідомлення-->
+		</div>
+
+	</div>
+
+	<script src="/js/logout.js"></script>
+
+	<footer class="mt-auto text-dark-50">
+		<p class="mt-5 mb-3 text-dark">&copy; 2024 Contest-IT. Бабяк Олексій. Всі права захищені</p>
+	</footer>
+
+</body>
+
+</html>

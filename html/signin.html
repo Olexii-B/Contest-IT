@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="uk" data-bs-theme="auto">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Вхід</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .form-signin {
+            width: 500px;
+            margin: 5rem auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-signin h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-floating label {
+            color: #666;
+        }
+
+        .form-floating input {
+            border: 1px solid #ddd;
+        }
+
+        .form-floating input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+	<!--навбар початок-->
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="mb-auto">
+            <div class="cover-container d-flex justify-content-between align-items-center">
+                <h3 class="text-dark mb-0">Contest-IT</h3>
+                <nav class="nav">
+                    <a class="nav-link text-dark" href="cover.html">Головна</a>
+                    <a class="nav-link text-dark" href="/php/news.php">Дописи</a>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="accountDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Аккаунт
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="signup.html">Реєстрація</a></li>
+                            <li><a class="dropdown-item" href="signin.html">Вхід</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <hr>
+
+		<style>
+			.nav-link:hover, 
+			.nav-link:focus {
+				color: #007bff;
+				text-decoration: underline;
+			}
+			.dropdown-menu .dropdown-item:hover,
+			.dropdown-menu .dropdown-item:focus {
+				background-color: #e9ecef; 
+				color: #000;
+			}
+		</style>
+    </div>
+    <!--навбар кінець-->
+
+    <!-- Sign-In Form -->
+    <main class="form-signin">
+        <form class="needs-validation" method="post" novalidate>
+            <h1 class="h3 mb-3 fw-normal">Заповніть поля:</h1>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com"
+                    required>
+                <label for="floatingInput">Електронна адреса</label>
+                <div class="invalid-feedback">Будь ласка, введіть дійсну електронну адресу.</div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password"
+                    required>
+                <label for="floatingPassword">Пароль</label>
+                <div class="invalid-feedback">Будь ласка, введіть пароль.</div>
+            </div>
+
+            <button class="btn btn-lg w-100" type="submit">Увійти</button>
+        </form>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" id="errorModalBody">
+                    <!-- Текст помилки буде вставлений тут -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Зрозуміло</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" id="successModalBody">
+                    <!-- Текст успіху -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Зрозуміло</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center mt-5">
+        <p>&copy; 2024 Contest-IT. Всі права захищені.</p>
+    </footer>
+
+    <script>
+        (function () { //Анонімна функція для самозапуску
+            'use strict'; //Використання строгого режиму
+            const forms = document.querySelectorAll('.needs-validation'); //Вибираємо всі форми з класом "needs-validation"
+            Array.from(forms).forEach(form => { //перебираємо всі вибрані форми
+                form.addEventListener('submit', event => {  //обробник події на відправлення форми
+                    if (!form.checkValidity()) {  //Перевіряємо валідність форми
+                        event.preventDefault(); //Запобігаємо відправленню форми, якщо вона не валідна
+                        event.stopPropagation(); //Зупиняємо подальшу обробку події
+                    }
+                    form.classList.add('was-validated'); //клас для відображення стану валідності
+                }, false);
+            });
+        })();
+    </script>
+
+    <script src="/js/login.js"></script>
+</body>
+
+</html>
