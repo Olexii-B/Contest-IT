@@ -1,12 +1,11 @@
 <?php
-require '5.php'; // Підключення до бази даних
+require '5.php';
 
 session_start();
 
 $userId = $_SESSION['user_id'] ?? null;
 $userRole = $_SESSION['role'] ?? null;
 
-// Вибірка всіх дописів
 $query = "SELECT news.id, news.title, news.content, news.created_at, 
                  users.id AS author_id, users.first_name, users.last_name 
           FROM news 
@@ -80,7 +79,7 @@ mysqli_close($dbcn);
                 </header>
             </div>
         <?php elseif ($userRole === 'student'): ?>
-		    <!--учнівський навбар початок-->
+            <!--учнівський навбар початок-->
             <div class="cover-container d-flex w-100 p-3 mx-auto flex-column">
                 <header class="mb-auto">
                     <div class="cover-container d-flex justify-content-between align-items-center">
@@ -101,7 +100,7 @@ mysqli_close($dbcn);
             <div class="cover-container d-flex w-100 p-3 mx-auto flex-column">
                 <header class="mb-auto">
                     <div class="cover-container d-flex justify-content-between align-items-center">
-                        <h3 class="float-md-start mb-0 text-dark">Contest-IT для Учнів</h3>
+                        <h3 class="float-md-start mb-0 text-dark">Contest-IT</h3>
                         <nav class="nav nav-masthead justify-content-center float-md-end">
                         <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/php/news.php">Дописи</a>
                         <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/html/cover.html">Головна</a>
@@ -113,31 +112,31 @@ mysqli_close($dbcn);
         <?php endif; ?>
 
 
-			<style>
-				.nav-link:hover,
-				.nav-link:focus {
-					color: #007bff;
-					text-decoration: underline;
-				}
+            <style>
+                .nav-link:hover,
+                .nav-link:focus {
+                    color: #007bff;
+                    text-decoration: underline;
+                }
 
-				.dropdown-menu .dropdown-item:hover,
-				.dropdown-menu .dropdown-item:focus {
-					background-color: #e9ecef;
-					color: #000;
-				}
+                .dropdown-menu .dropdown-item:hover,
+                .dropdown-menu .dropdown-item:focus {
+                    background-color: #e9ecef;
+                    color: #000;
+                }
 
                 .custom-nav-link {
-				    margin: 0 10px 0 10px;
-			    }
+                    margin: 0 10px 0 10px;
+                }
 
-				body{
-					display: flex;
-					flex-direction: column;
-					min-height: 100vh; /* Мінімальна висота для body */
-				}
-			</style>
-		</div>
-		<!--навбар кінець-->
+                body{
+                    display: flex;
+                    flex-direction: column;
+                    min-height: 100vh;
+                }
+            </style>
+        </div>
+        <!--навбар кінець-->
 
 <body>
 <div class="container mt-5">
@@ -188,3 +187,4 @@ mysqli_close($dbcn);
 </div>
 </body>
 </html>
+
