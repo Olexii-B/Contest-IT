@@ -1,9 +1,7 @@
 <?php
-require '5.php'; // Ensure database connection
+require '5.php';
 require_once 'generateNotifications.php';
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+
 
 session_set_cookie_params([
     'lifetime' => 0,
@@ -15,7 +13,7 @@ session_set_cookie_params([
 session_start();
 
 ob_start();
-header('Content-Type: application/json'); // JSON response
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'student') {
@@ -25,15 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
             $fileName = basename($_FILES['file']['name']);
-            $fileType = mime_content_type($_FILES['file']['tmp_name']); // Dynamically detect MIME type
-            $fileSize = intval($_FILES['file']['size']); // Ensure the file size is an integer
+            $fileType = mime_content_type($_FILES['file']['tmp_name']);
+            $fileSize = intval($_FILES['file']['size']);
 
             if ($fileSize <= 0 || empty($fileName)) {
                 echo json_encode(['success' => false, 'error' => 'File size is 0 or file name is empty.']);
                 exit;
             }
 
-            // Check for allowed MIME types
             $allowedTypes = [
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
                 'application/x-rar-compressed', // .rar
@@ -48,10 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-            // Read file content as binary
             $fileData = file_get_contents($_FILES['file']['tmp_name']);
 
-            // SQL query to insert the file data
             $query = "INSERT INTO class_files (class_id, student_id, file_name, file_type, file_size, file_data, competition_id) 
                       VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = mysqli_prepare($dbcn, $query);
@@ -61,15 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-            // Bind parameters ('b' is for binary data in bind_param)
             mysqli_stmt_bind_param($stmt, 'iisssbi', $classId, $studentId, $fileName, $fileType, $fileSize, $fileData, $competitionId);
 
-            // Send binary data properly
             mysqli_stmt_send_long_data($stmt, 5, $fileData);
 
-            // Execute the query
             if (mysqli_stmt_execute($stmt)) {
-                // Виклик notifyWorkUploaded після успішного збереження файлу
                 notifyWorkUploaded($dbcn);
 
                 ob_clean();
@@ -89,3 +80,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
