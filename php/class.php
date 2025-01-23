@@ -53,6 +53,59 @@ mysqli_close($dbcn);
     <h2><?= htmlspecialchars($class['name']) ?> (Код: <?= htmlspecialchars($class['class_code']) ?>)</h2>
     <p>Створено: <?= htmlspecialchars($class['created_at']) ?></p>
 
+    <style>
+        .notifications-panel {
+            position: fixed;
+            top: 100px;
+            right: 10px;
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .notification-item {
+            background: #f4f4f4;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-item.info {
+            border-left: 5px solid #007bff;
+        }
+
+        .notification-item.success {
+            border-left: 5px solid #28a745;
+        }
+
+        .notification-item.warning {
+            border-left: 5px solid #ffc107;
+        }
+
+        .notification-item.error {
+            border-left: 5px solid #dc3545;
+        }
+
+        .notification-item .close-btn {
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .notification-item .close-btn:hover {
+            color: #000;
+        }
+    </style>
+
+    <div id="notifications" class="notifications-panel"></div>
+
     <h4>Студенти цього класу:</h4>
     <table class="table">
         <thead>
@@ -159,7 +212,7 @@ mysqli_close($dbcn);
             echo '<td>' . htmlspecialchars($row['uploaded_at']) . '</td>';
             echo '<td>' . htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) . '</td>';
             echo '<td>' . htmlspecialchars($row['competition_name']) . '</td>';
-            echo '<td><a href="/php/downloadFile.php?file_id=' . intval($row['id']) . '" class="btn btn-success btn-sm">Download</a></td>';
+            echo '<td><a href="/php/downloadFile.php?file_id=' . intval($row['id']) . '" class="btn btn-success btn-sm">Завантажити</a></td>';
             echo '</tr>';
         }
 
@@ -206,7 +259,7 @@ mysqli_close($dbcn);
             echo '<td>' . htmlspecialchars($row['uploaded_at']) . '</td>';
             echo '<td>' . htmlspecialchars($row['competition_name']) . '</td>';
             echo '<td>
-                    <a href="/php/downloadFile.php?file_id=' . intval($row['id']) . '" class="btn btn-success btn-sm">Download</a>
+                    <a href="/php/downloadFile.php?file_id=' . intval($row['id']) . '" class="btn btn-success btn-sm">Завантажити</a>
                     <form action="/php/deleteFile.php" method="POST" style="display:inline;">
                         <input type="hidden" name="file_id" value="' . intval($row['id']) . '">
                         <button type="submit" class="btn btn-danger btn-sm">Видалити</button>
@@ -219,6 +272,8 @@ mysqli_close($dbcn);
         mysqli_stmt_close($stmt);
     }
     ?>
+
+<script src="/js/notifications.js"></script>
 
 <script>
     // Function to show the error modal
@@ -319,3 +374,4 @@ mysqli_close($dbcn);
 </div>
 </body>
 </html>
+
