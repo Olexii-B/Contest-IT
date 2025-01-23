@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dbName = "main_db";
         mysqli_select_db($dbcn, $dbName) or die("Cannot select database: " . mysqli_error($dbcn));
 
-        // Check if the class exists and fetch hashed password
         $query = "SELECT id, password FROM classes WHERE class_code = ?";
         $stmt = mysqli_prepare($dbcn, $query);
         if ($stmt) {
@@ -28,15 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
-            // Check if a result was found
             if (mysqli_stmt_num_rows($stmt) > 0) {
                 mysqli_stmt_bind_result($stmt, $classDatabaseID, $hashedPassword);
                 mysqli_stmt_fetch($stmt);
                 mysqli_stmt_close($stmt);
 
-                // Verify password
                 if (password_verify($classPassword, $hashedPassword)) {
-                    // Check if the student is already in the class
                     $checkMembershipQuery = "SELECT COUNT(*) FROM class_memberships WHERE class_id = ? AND student_id = ?";
                     $checkStmt = mysqli_prepare($dbcn, $checkMembershipQuery);
                     mysqli_stmt_bind_param($checkStmt, 'ii', $classDatabaseID, $studentID);
@@ -48,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($membershipCount > 0) {
                         echo json_encode(['success' => false, 'error' => 'You are already a member of this class.']);
                     } else {
-                        // Insert the student into the class_memberships table
                         $insertQuery = "INSERT INTO class_memberships (class_id, student_id) VALUES (?, ?)";
                         $insertStmt = mysqli_prepare($dbcn, $insertQuery);
                         mysqli_stmt_bind_param($insertStmt, 'ii', $classDatabaseID, $studentID);
@@ -65,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo json_encode(['success' => false, 'error' => 'Invalid class code or password.']);
                 }
             } else {
-                // No class found with the given class code
                 echo json_encode(['success' => false, 'error' => 'Class not found with the given code.']);
                 mysqli_stmt_close($stmt);
             }
@@ -79,3 +73,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(['success' => false, 'error' => 'Invalid request method.']);
 }
 ?>
+
