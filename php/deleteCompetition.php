@@ -4,13 +4,11 @@ require '1.php';
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     parse_str(file_get_contents('php://input'), $data);
 
-    // Debugging: Output the data received
     error_log('Received data: ' . print_r($data, true));
 
     if (isset($data['id'])) {
         $compId = $data['id'];
 
-        // Debugging: Output the ID to be deleted
         error_log('ID to be deleted: ' . $compId);
 
         $dbName = "main_db";
@@ -45,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         echo "Invalid request: Competition ID not provided.";
     }
 } else {
-    http_response_code(405); // Method not allowed
+    http_response_code(405);
     error_log("Invalid request method.");
     echo "Invalid request method.";
 }
