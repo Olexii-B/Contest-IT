@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const notificationsPanel = document.getElementById('notifications');
 
-    // Функція для завантаження повідомлень
     const loadNotifications = () => {
         fetch('../php/getNotifications.php')
             .then(response => {
@@ -11,9 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                notificationsPanel.innerHTML = ''; // Очищення попередніх повідомлень
+                notificationsPanel.innerHTML = '';
 
-                // Якщо є повідомлення
                 if (data.notifications.length > 0) {
                     data.notifications.forEach(notification => {
                         const div = document.createElement('div');
@@ -24,11 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                         notificationsPanel.append(div);
 
-                        // Автоматичне зникнення через 10 секунд
                         setTimeout(() => div.remove(), 10000);
                     });
                 } else {
-                    // Якщо повідомлень немає
                     notificationsPanel.innerHTML = '<p>Повідомлення відсутні.</p>';
                 }
             })
@@ -38,12 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 
-    // Підключення закриття повідомлення
     notificationsPanel.addEventListener('click', (e) => {
         if (e.target.classList.contains('close-btn')) {
             const notificationId = e.target.dataset.id;
 
-            // Надсилання запиту на сервер для позначення прочитаним
             fetch('../php/markAsRead.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -57,8 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    loadNotifications(); // Завантажити повідомлення при завантаженні сторінки
+    loadNotifications();
 
-    // Оновлення повідомлень кожні 10 секунд
-    setInterval(loadNotifications, 10000);
+    // Оновлення повідомлень кожні 3 секунд
+    setInterval(loadNotifications, 3000);
 });
+
