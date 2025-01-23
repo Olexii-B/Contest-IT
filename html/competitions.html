@@ -19,15 +19,141 @@
 
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
 
+    <!-- навбар -->
+    <div id="navbar-container"></div>
+
+    <style>
+        .nav-link:hover,
+        .nav-link:focus {
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+        .dropdown-menu .dropdown-item:hover,
+        .dropdown-menu .dropdown-item:focus {
+            background-color: #e9ecef;
+            color: #000;
+        }
+
+        body{
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+
+        .custom-nav-link {
+            margin: 0 10px 0 10px;
+        }
+    </style>
+
+    <script>
+        function getCookie(name) {
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(name + "=") === 0) {
+                    return c.substring(name.length + 1, c.length);
+                }
+            }
+            return "";
+        }
+
+            function getCookie(name) {
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(name + "=") === 0) {
+                    return c.substring(name.length + 1, c.length);
+                }
+            }
+            return "";
+        }
+
+        // Отримуємо роль користувача з кукі
+        const userRole = getCookie('role'); // роль з кукі
+        const userId = getCookie('userId'); // userId з кукі (для перевірки)
+
+        let navbarContent = '';
+
+        // Різний навбар для учня, вчителя і гостей
+        if (userRole === 'teacher') {
+            navbarContent = `
+                <div class="cover-container d-flex w-100 p-3 mx-auto flex-column">
+                    <header class="mb-auto">
+                        <div class="cover-container d-flex justify-content-between align-items-center">
+                            <h3 class="float-md-start mb-0 text-dark">Contest-IT для Вчителів</h3>
+                            <nav class="nav nav-masthead justify-content-center float-md-end">
+                                <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/html/create-comp.html">Додати Конкурс</a>
+                                <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/html/create-class.html">Створити клас</a>
+                                <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/php/news.php">Дописи</a>
+                                <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/html/teachers.html">Головна</a>
+                                <a class="nav-link text-dark" href="about-dev.html">Про розробника</a>
+                            </nav>
+                        </div>
+                        <hr>
+                    </header>
+                </div>
+            `;
+        } else if (userRole === 'student') {
+            navbarContent = `
+                <div class="cover-container d-flex w-100 p-3 mx-auto flex-column">
+                    <header class="mb-auto">
+                        <div class="cover-container d-flex justify-content-between align-items-center">
+                            <h3 class="float-md-start mb-0 text-dark">Contest-IT для Учнів</h3>
+                            <nav class="nav nav-masthead justify-content-center float-md-end">
+                                <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/html/enter-class.html">Вступити в Клас</a>
+                                <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/php/news.php">Дописи</a>
+                                <a class="nav-link fw-bold py-1 px-0 custom-nav-link text-dark" href="/html/students.html">Головна</a>
+                                <a class="nav-link text-dark" href="about-dev.html">Про розробника</a>
+                            </nav>
+                        </div>
+                        <hr>
+                    </header>
+                </div>
+            `;
+        } else {
+            navbarContent = `
+                <div class="cover-container d-flex w-100 p-3 mx-auto flex-column">
+                    <header class="mb-auto">
+                        <div class="cover-container d-flex justify-content-between align-items-center">
+                            <h3 class="float-md-start mb-0 text-dark">Contest-IT</h3>
+                                <nav class="nav">
+                                    <a class="nav-link text-dark" href="cover.html">Головна</a>
+                                    <a class="nav-link text-dark" href="/php/news.php">Дописи</a>                   
+                                        <div class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle text-dark" href="#" id="accountDropdown" role="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                Аккаунт
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="signup.html">Реєстрація</a></li>
+                                                <li><a class="dropdown-item" href="signin.html">Вхід</a></li>
+                                            </ul>
+                                        </div>
+                                    <a class="nav-link text-dark" href="about-dev.html">Про розробника</a>
+                            </nav>
+                        </div>
+                        <hr>
+                    </header>
+                </div>
+            `;
+        }
+
+        document.getElementById('navbar-container').innerHTML = navbarContent;
+    </script>
+
+
         <style>
             td.name-cell {
-                background-color: transparent; /* Переконайтесь, що клітинка не має фону */
+                background-color: transparent;
                 padding: 8px;
             }
 
             td.name-cell a {
-                color: inherit; /* Зберегти колір посилання */
-                text-decoration: none; /* Прибрати підкреслення */
+                color: inherit;
+                text-decoration: none;
             }
 
             .custom-nav-link {
@@ -114,6 +240,7 @@
 
                 <!-- Кнопка фільтрування -->
                 <button id="applyFilterButton" class="btn btn-primary">Застосувати фільтри</button>
+                <button id="resetFilterButton" class="btn btn-secondary ms-2">Скинути фільтри</button>
             </div>
 
             <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5" id="competitions-container">
@@ -150,3 +277,4 @@
 </body>
 
 </html>
+
