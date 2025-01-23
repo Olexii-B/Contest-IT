@@ -141,7 +141,7 @@
             body{
                 display: flex;
                 flex-direction: column;
-                min-height: 100vh; /* Мінімальна висота для body */
+                min-height: 100vh;
             }
 
             .custom-nav-link {
@@ -170,65 +170,53 @@
 
 
         <script>
-            //обробник події, який спрацьовує після повного завантаження DOM
             document.addEventListener("DOMContentLoaded", function () { 
                 
-                fetch('/php/getStudentClasses.php') //HTTP-запит до сервера для отримання класів студента
+                fetch('/php/getStudentClasses.php') //HTTP-запит до сервера
                     
-                    //Перетворюємо відповідь сервера на формат JSON
                     .then(response => response.json())
-                    //0бробляємо отримані дані
                     .then(data => {
-                        //Отримуємо елемент, тіло таблиці класів за ID + елемент повідомлення про відсутність класів
                         const classesTable = document.getElementById("classesTable"); 
                         const classesTableBody = document.getElementById("classesTableBody");
                         const noClassesMessage = document.getElementById("noClassesMessage");
 
-                        if (data.status === "success") { //чи статус відповіді - успішний
-                            if (data.classes.length === 0) { //масив класів порожній
-                                noClassesMessage.style.display = "block"; //повідомлення про відсутність класів
-                                classesTable.style.display = "none"; //сховати таблицю класів
+                        if (data.status === "success") {
+                            if (data.classes.length === 0) { 
+                                noClassesMessage.style.display = "block";
+                                classesTable.style.display = "none";
                             } else {
-                                noClassesMessage.style.display = "none"; //сховати повідомлення ьа 
-                                classesTable.style.display = "table"; //показати таблицю
+                                noClassesMessage.style.display = "none";
+                                classesTable.style.display = "table";
 
-                                classesTableBody.innerHTML = ""; //очистка тіла таблиці перед заповненням новими даними
-                                data.classes.forEach(classData => { //перебір масиву класів
-                                    const row = document.createElement("tr"); //новий рядок таблиці
+                                classesTableBody.innerHTML = "";
+                                data.classes.forEach(classData => {
+                                    const row = document.createElement("tr");
 
-                                    const codeCell = document.createElement("td"); //клітинка таблиці для коду класу
-                                    codeCell.textContent = classData.class_code; //додати код класу
-                                    row.appendChild(codeCell); //і додаєму клітинку з кодом до рядка
+                                    const codeCell = document.createElement("td");
+                                    codeCell.textContent = classData.class_code;
+                                    row.appendChild(codeCell);
 
-                                    //так само клітинка для назви класу
                                     const nameCell = document.createElement("td"); 
                                     nameCell.textContent = classData.name;
                                     row.appendChild(nameCell);
 
-                                    //клітинка для дати приєднання
                                     const joinedAtCell = document.createElement("td");
 
-                                    //Форматування дати приєднання у локальний формат
                                     joinedAtCell.textContent = new Date(classData.joined_at).toLocaleDateString();
                                     row.appendChild(joinedAtCell);
 
-                                    //клітинка для дій, створення кнопки для доступа в клас
                                     const actionsCell = document.createElement("td");
                                     const accessButton = document.createElement("button");
                                     accessButton.textContent = "відкрити клас";
-                                    accessButton.className = "btn btn-primary btn-sm"; //класи бутстрапа для стилів
+                                    accessButton.className = "btn btn-primary btn-sm";
 
-                                    //обробник подій для кнопки
                                     accessButton.addEventListener("click", () => {
-                                        //перенаправлення на сторінку класу з ID класа у посиланні
                                         window.location.href = `/php/class.php?id=${classData.id}`;
                                     });
                                     
-                                    //кнопку до клітинки, клітинку до рядка.
                                     actionsCell.appendChild(accessButton);
                                     row.appendChild(actionsCell);
 
-                                    //весь рядок, додати до тіла таблиці
                                     classesTableBody.appendChild(row);
                                 });
                             }
