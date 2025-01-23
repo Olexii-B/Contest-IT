@@ -1,5 +1,5 @@
 <?php
-require '5.php'; // Підключення до бази даних
+require '5.php';
 
 session_start();
 
@@ -9,7 +9,6 @@ if (!isset($_GET['id'])) {
 
 $postId = $_GET['id'];
 
-// Вибірка інформації про допис
 $query = "SELECT news.title, news.content, news.created_at, 
                  news.author_id, users.first_name, users.last_name 
           FROM news 
@@ -21,7 +20,6 @@ mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $post = mysqli_fetch_assoc($result);
 
-// Отримати коментарі до посту
 $commentsQuery = "SELECT comments.id, comments.content, comments.created_at, comments.score, 
                          users.first_name, users.last_name, users.id AS user_id 
                   FROM comments 
@@ -38,7 +36,6 @@ if (!$post) {
     die('Допис не знайдено');
 }
 
-// Get current user info
 $userId = $_SESSION['user_id'] ?? null;
 $userRole = $_SESSION['user_role'] ?? null;
 
@@ -64,7 +61,7 @@ mysqli_close($dbcn);
     <hr>
     <p><?= nl2br(htmlspecialchars($post['content'])) ?></p>
 
-    <?php if (isset($_SESSION['user_id'])): ?> <!-- Залишити коментар -->
+    <?php if (isset($_SESSION['user_id'])): ?>
     <form action="add_comment.php" method="POST" class="mt-5">
         <input type="hidden" name="post_id" value="<?= $postId ?>">
         <div class="mb-3">
@@ -77,7 +74,7 @@ mysqli_close($dbcn);
         <p class="text-muted mt-5">Увійдіть, щоб залишити коментар.</p>
     <?php endif; ?>
 
-    <h3 class="mt-5">Коментарі</h3> <!-- Коментарі інших -->
+    <h3 class="mt-5">Коментарі</h3>
     <?php if (!empty($comments)): ?>
         <ul class="list-group">
             <?php foreach ($comments as $comment): ?>
@@ -124,3 +121,4 @@ mysqli_close($dbcn);
 <a href="news.php" class="btn btn-secondary mt-3" style="margin:10px;">Повернутися</a>
 </body>
 </html>
+
