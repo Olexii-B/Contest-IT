@@ -7,17 +7,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
     $commentId = $_POST['id'];
     $postId = $_POST['post_id'];
 
-    // Ensure the user is either the comment owner or the post author
     $dbcn->begin_transaction();
 
     try {
-        // Delete votes related to the comment
         $voteQuery = "DELETE FROM comment_votes WHERE comment_id = ?";
         $voteStmt = mysqli_prepare($dbcn, $voteQuery);
         mysqli_stmt_bind_param($voteStmt, 'i', $commentId);
         mysqli_stmt_execute($voteStmt);
 
-        // Delete the comment
         $commentQuery = "DELETE c FROM comments c
                          JOIN news n ON c.post_id = n.id
                          WHERE c.id = ? AND (c.user_id = ? OR n.author_id = ?)";
@@ -35,3 +32,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
 header("Location: view_post.php?id=" . $_POST['post_id']);
 exit;
 ?>
+
