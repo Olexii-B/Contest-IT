@@ -1,7 +1,7 @@
 <?php
 require '5.php';
 
-session_start(); // Ensure session is started to access $_SESSION variables
+session_start();
 
 $userId = $_SESSION['user_id'] ?? $_COOKIE['user_id'] ?? null;
 $userRole = $_SESSION['role'] ?? $_COOKIE['role'] ?? null;
@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userRole === 'student') {
         exit;
     }
 
-    // Verify that the file belongs to the logged-in student
     $query = "SELECT class_id FROM class_files WHERE id = ? AND student_id = ?";
     $stmt = mysqli_prepare($dbcn, $query);
     mysqli_stmt_bind_param($stmt, 'ii', $fileId, $userId);
@@ -22,9 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userRole === 'student') {
     $result = mysqli_stmt_get_result($stmt);
 
     if ($row = mysqli_fetch_assoc($result)) {
-        $classId = $row['class_id']; // Get the class ID for redirection
+        $classId = $row['class_id'];
 
-        // Proceed to delete the file
         $deleteQuery = "DELETE FROM class_files WHERE id = ?";
         $deleteStmt = mysqli_prepare($dbcn, $deleteQuery);
         mysqli_stmt_bind_param($deleteStmt, 'i', $fileId);
