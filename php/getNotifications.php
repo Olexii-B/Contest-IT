@@ -1,10 +1,13 @@
 <?php
 require '5.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 header('Content-Type: application/json');
 
-// Перевіряємо, чи користувач увійшов у систему
 $userId = $_SESSION['user_id'] ?? null;
 
 if (!$userId) {
@@ -12,30 +15,27 @@ if (!$userId) {
     exit();
 }
 
-// Отримуємо непрочитані повідомлення
 $query = "
-    SELECT id, content, type, is_read, created_at 
-    FROM notifications 
-    WHERE user_id = ? AND is_read = FALSE 
-    ORDER BY created_at DESC
+    SELECT n.id, u.content, u.type, n.is_read, n.created_at 
+    FROM notifications n
+    JOIN unique_notifications u ON n.notification_id = u.id
+    WHERE n.user_id = ? AND n.is_read = FALSE 
+    ORDER BY n.created_at DESC
 ";
 
 if ($stmt = mysqli_prepare($dbcn, $query)) {
     mysqli_stmt_bind_param($stmt, 'i', $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    
-    // Перетворюємо результат у масив
     $notifications = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_stmt_close($stmt);
 
-    // Повертаємо повідомлення у вигляді JSON
     echo json_encode(['notifications' => $notifications]);
     exit();
 }
 
-// У разі помилки запиту повертаємо порожній масив
-http_response_code(500); // Встановлюємо HTTP-код помилки
+http_response_code(500);
 echo json_encode(['notifications' => []]);
 exit();
 ?>
+
