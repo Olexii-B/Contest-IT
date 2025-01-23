@@ -1,54 +1,36 @@
-let cardView = true; //Змінна, яка визначає, чи відображати змагання у вигляді карток
+let cardView = true;
 
-//слухач події, який виконується після завантаження документа DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function () {
     
-    //змагання при завантаженні сторінки
     loadCompetitions();
-    
-    //слухач події на кнопку зміни виду
     document.getElementById('changeViewButton').addEventListener('click', changeView);
-
-    //слухач події на кнопку підтвердження видалення
     document.getElementById('confirmDeleteButton').addEventListener('click', deleteCompetition);
-
-    //слухач події, щоб застосувати кнопку фільтрації
     document.getElementById('applyFilterButton').addEventListener('click', loadCompetitions);
+    document.getElementById('resetFilterButton').addEventListener('click', resetFilters);
 });
 
-//функція для зміни виду відображення змагань
 function changeView() {
-    cardView = !cardView; //зміна на протилежне значення
-    loadCompetitions(); //перезвантажити змагання з новим видом
+    cardView = !cardView;
+    loadCompetitions();
 }
 
-//Функція для отримання значення кукі за його ім'ям
 function getCookie(name) {
-    const value = `; ${document.cookie}`; //Додати крапку з комою для коректного парсингу кукі
-    const parts = value.split(`; ${name}=`); //Розділити кукі за ім'ям
-    //знайдено => повертаємо його значення
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift(); 
 }
 
-//Функція для завантаження змагань з БД
+
+
 function loadCompetitions() {
-    //Отримати роль користувача з кукі (учень/вчитель)
     const userRole = getCookie('role');
-
-    //Отримати вхідні дані для фільтрування та сортування
-    //Сортування за замовчуванням - за назвою
     const sortBy = document.getElementById('sortSelect').value || 'name';
-
-    //Порядок сортування за замовчуванням - зростання
     const sortOrder = document.getElementById('sortOrderSelect').value || 'asc';
 
-    //Фільтр дати початку
     const startDateFilter = document.getElementById('startDateFilter').value;
 
-    //Фільтр дати закінчення
     const endDateFilter = document.getElementById('endDateFilter').value;
 
-    //Конструювання параметрів запиту для отримання даних
     const params = new URLSearchParams({
         sortBy,
         sortOrder,
@@ -56,23 +38,18 @@ function loadCompetitions() {
         endDateFilter
     });
 
-    //Виконуємо HTTP запит до сервера для отримання змагань
     fetch(`http://localhost/php/getCompetitions.php?${params.toString()}`)
-        .then(response => response.json()) //відповідь у формат JSON
+        .then(response => response.json())
         .then(competitions => {
-            //Отримати контейнер для змагань
             const competitionsContainer = document.querySelector('#competitions-container');
-            competitionsContainer.innerHTML = ''; //Очистка, контейнера перед відображенням нових даних
+            competitionsContainer.innerHTML = '';
 
-            //Якщо режим перегляду - таблиця, створюємо таблицю для відображення змагань
             if (!cardView) {
-                const table = document.createElement('table'); //Створюємо новий елемент таблиці
-                table.className = 'text-dark table table-bordered table-competitions'; //класи для стилізації бутстрап
+                const table = document.createElement('table');
+                table.className = 'text-dark table table-bordered table-competitions';
                 
-                const headerRow = document.createElement('tr'); //рядок заголовків таблиці 
+                const headerRow = document.createElement('tr'); 
 
-                //Масив об'єктів, для опису заголовків таблиці: ID, Назва, Опис, Дата Початку, 
-                //Дата Кінця, Статус (завершено чи ні), Дії (для вчителів)
                 const headers = [
                     { name: 'ID', key: 'id' },
                     { name: 'Назва', key: 'name' },
@@ -80,20 +57,16 @@ function loadCompetitions() {
                     { name: 'Дата початку', key: 'startdate' },
                     { name: 'Дата кінця', key: 'deadline' },
                     { name: 'Статус', key: 'status' },
-                    { name: 'Дії', key: null }  //Стовпець Дії не потребує сортування
+                    { name: 'Дії', key: null }
                 ];
 
-                //Створити заголовки таблиці на основі масиву headers
                 headers.forEach(header => {
-                    const th = document.createElement('th'); //Створити новий елемент заголовка стовпця
-                    th.textContent = header.name; //Встановити текст заголовка
+                    const th = document.createElement('th');
+                    th.textContent = header.name;
 
-                    //Додати приймач подій кліку лише для відсортованих стовпців
                     if (header.key) {
-                        //Змінити курсор на вказівник при наведенні на заголовок стовпця
                         th.style.cursor = 'pointer';
 
-                        //Викликаємо функцію для перемикання сортування при кліку на заголовок стовпця
                         th.addEventListener('click', () => {
                             toggleSort(header.key);
                         });
@@ -105,15 +78,12 @@ function loadCompetitions() {
                 table.appendChild(headerRow);
                 competitionsContainer.appendChild(table);
             }
-            //Для кожного змагання створюємо елемент і додаємо його до контейнера в залежності від виду перегляду
             competitions.forEach(comp => {
-            const competitionElement = createCompetitionElement(comp, userRole); //Створюємо елемент змагання
+            const competitionElement = createCompetitionElement(comp, userRole);
 
                 if (cardView) {
-                    //Додаємо елемент до контейнера у вигляді картки
                     competitionsContainer.appendChild(competitionElement);
                 } else {
-                      //Додаємо елемент до таблиці
                     document.querySelector('#competitions-container table').appendChild(competitionElement);
                 }
             });
@@ -123,42 +93,30 @@ function loadCompetitions() {
         });
 }
 
-// Функція для перемикання порядку сортування на основі вибраного стовпця
 function toggleSort(column) {
-    const sortOrderSelect = document.getElementById('sortOrderSelect'); //Отримуємо селектор порядку сортування
-    const sortSelect = document.getElementById('sortSelect'); //Отримуємо селектор стовпця для сортування
+    const sortOrderSelect = document.getElementById('sortOrderSelect');
+    const sortSelect = document.getElementById('sortSelect');
 
-    //Перемикаємо порядок сортування, якщо натиснуто один і той самий стовпець, інакше за замовчуванням - за зростанням
     if (sortSelect.value === column) {
-        //Перемикаємо між "asc" і "desc"
         sortOrderSelect.value = sortOrderSelect.value === 'asc' ? 'desc' : 'asc';
     } else {
-        //Встановлюємо новий стовпець для сортування
         sortSelect.value = column;        
         sortOrderSelect.value = 'asc';
-        //Скидаємо порядок сортування на "asc"
     }
 
-    //Перезавантажуємо змагання з новим сортуванням та фільтрами
     loadCompetitions();
 }
 
-// Функція createCompetitionElement створює елемент змагання (картку або рядок таблиці) 
-//на основі наданих даних про змагання (`comp`) і ролі користувача (`userRole`).
 function createCompetitionElement(comp, userRole) {
-    // Перевіряє, чи змагання завершилося
     const isExpired = comp.status === 'expired';
 
-    // Обробляє вигляд картки
     if (cardView) {
-        //Створює посилання на сайт змагання
         const anchor = document.createElement('a');
         anchor.setAttribute('data-id', comp.id);
         anchor.href = comp.website.startsWith('http://') || comp.website.startsWith('https://') ? comp.website : `http://${comp.website}`;
         anchor.className = 'text-decoration-none';
         anchor.target = '_blank';
 
-        // Створює контейнер для картки
         const colDiv = document.createElement('div');
         colDiv.className = 'col';
 
@@ -168,16 +126,13 @@ function createCompetitionElement(comp, userRole) {
         const contentDiv = document.createElement('div');
         contentDiv.className = 'd-flex flex-column h-100 p-5 pb-3 text-dark text-shadow-1';
 
-        // Заголовок змагання
         const h3Header = document.createElement('h3');
         h3Header.className = 'pt-5 mt-5 mb-4 display-6 lh-1 fw-bold';
         h3Header.textContent = comp.name;
 
-        // Створює список для відображення термінів змагання
         const ul = document.createElement('ul');
         ul.className = 'd-flex list-unstyled mt-auto';
 
-        // Дата закінчення змагання
         const deadlineLi = document.createElement('li');
         deadlineLi.className = 'd-flex align-items-center me-3';
         const deadlineSmall = document.createElement('small');
@@ -185,15 +140,13 @@ function createCompetitionElement(comp, userRole) {
         deadlineLi.appendChild(deadlineSmall);
         ul.appendChild(deadlineLi);
 
-        // Дата початку змагання
         const startDateLi = document.createElement('li');
         startDateLi.className = 'd-flex align-items-center me-3';
         const startDateSmall = document.createElement('small');
         startDateSmall.textContent = `Початок: ${comp.startdate}`;
         startDateLi.appendChild(startDateSmall);
-        ul.insertBefore(startDateLi, deadlineLi); // Додає дату початку перед терміном
+        ul.insertBefore(startDateLi, deadlineLi);
 
-        // Класи, для яких дозволено змагання
         const classesLi = document.createElement('li');
         classesLi.className = 'd-flex align-items-center';
         const classesSmall = document.createElement('small');
@@ -201,75 +154,65 @@ function createCompetitionElement(comp, userRole) {
         classesLi.appendChild(classesSmall);
         ul.appendChild(classesLi);
 
-        // Опис змагання
         const descDiv = document.createElement('div');
         descDiv.className = 'mb-4 text-dark';
         descDiv.textContent = comp.description;
 
-        // Додає заголовок, опис та список до контенту картки
         contentDiv.appendChild(h3Header);
         contentDiv.appendChild(descDiv);
         contentDiv.appendChild(ul);
 
-        // Кнопка редагування змагання
         const editButton = document.createElement('button');
         editButton.className = 'btn btn-sm btn-warning mt-2';
         editButton.textContent = 'Редагувати';
 
-        // Додає обробник подій для кнопки редагування
         editButton.addEventListener('click', function (event) {
-            event.stopPropagation(); // Зупиняє подію від подальшого поширення
-            event.preventDefault();  // Запобігає стандартній поведінці кнопки
-            toggleDeleteButton(deleteButton); // Викликає функцію для перемикання видимості кнопки видалення
+            event.stopPropagation();
+            event.preventDefault();
+            toggleDeleteButton(deleteButton);
         });
 
-        // Перевірити, чи роль користувача є 'teacher'
         if (userRole === 'teacher') {
-            contentDiv.appendChild(editButton); // Додає кнопку редагування, якщо користувач - вчитель
+            contentDiv.appendChild(editButton);
         }
 
-        // Кнопка видалення змагання
         const deleteButton = document.createElement('button');
         deleteButton.className = 'btn btn-sm btn-danger mt-2';
         deleteButton.textContent = 'Видалити змагання';
 
-        deleteButton.style.display = 'none'; // Спочатку кнопка прихована
+        deleteButton.style.display = 'none';
 
-        // Додає обробник подій для кнопки видалення
         deleteButton.addEventListener('click', function (event) {
             event.stopPropagation();
             event.preventDefault();
-            confirmDelete(comp.id); // Викликає функцію підтвердження видалення змагання
+            confirmDelete(comp.id);
         });
 
-        // Перевірити, чи роль користувача є 'teacher'
         if (userRole === 'teacher') {
-            contentDiv.appendChild(deleteButton); // Додає кнопку видалення, якщо користувач - вчитель
+            contentDiv.appendChild(deleteButton);
         }
 
-        cardDiv.appendChild(contentDiv); // Додає контент до картки
-        colDiv.appendChild(cardDiv);      // Додає картку до стовпця
-        anchor.appendChild(colDiv);         // Додає стовпець до посилання
+        cardDiv.appendChild(contentDiv);
+        colDiv.appendChild(cardDiv);
+        anchor.appendChild(colDiv);
 
-        return anchor;  // Повертає створене посилання як результат функції
+        return anchor;
     } else {
-        // Табличне представлення
-        const tr = document.createElement('tr');  // Створює новий рядок таблиці
+        const tr = document.createElement('tr');
 
         if (isExpired) {
-            tr.classList.add('table-danger'); // Підсвічує рядки, що завершилися
+            tr.classList.add('table-danger');
         }
 
-        // Створення комірок таблиці для відображення даних про змагання
         const idTd = document.createElement('td');
         idTd.textContent = comp.id;
 
         const nameTd = document.createElement('td');
-        const nameLink = document.createElement('a');  // Створює посилання на назву змагання
+        const nameLink = document.createElement('a');
         nameLink.href = comp.website.startsWith('http://') || comp.website.startsWith('https://') ? comp.website : `http://${comp.website}`;
         nameLink.textContent = comp.name;
         nameLink.className = 'text-decoration-none';
-        nameLink.target = '_blank';  // Відкриває посилання в новій вкладці
+        nameLink.target = '_blank';
         nameTd.appendChild(nameLink);
 
         const descriptionTd = document.createElement('td');
@@ -281,35 +224,32 @@ function createCompetitionElement(comp, userRole) {
         const deadlineTd = document.createElement('td');
         deadlineTd.textContent = comp.deadline;
 
-        // Стовпчик стану змагання (активний/закінчився)
         const statusTd = document.createElement('td');
         statusTd.textContent = isExpired ? 'Закінчився' : 'Активний';
 
-        // Стовпчик дій (редагування/видалення)
         const actionTd = document.createElement('td');
 
-        if (userRole === 'teacher') {  // Якщо користувач - вчитель, додаємо кнопки дій
+        if (userRole === 'teacher') {
             const editButton = document.createElement('button');
             editButton.className = 'btn btn-sm btn-warning me-2';
             editButton.textContent = 'Редагувати';
 
             editButton.addEventListener('click', function () {
-                toggleDeleteButton(deleteButton);  // Викликає функцію для перемикання видимості кнопки видалення
+                toggleDeleteButton(deleteButton);
             });
-            actionTd.appendChild(editButton);  // Додає кнопку редагування
+            actionTd.appendChild(editButton);
 
             const deleteButton = document.createElement('button');
             deleteButton.className = 'btn btn-sm btn-danger';
             deleteButton.textContent = 'Видалити змагання';
-            deleteButton.style.display = 'none';  // Спочатку кнопка прихована
+            deleteButton.style.display = 'none';
 
             deleteButton.addEventListener('click', function () {
-                confirmDelete(comp.id);  // Викликає функцію підтвердження видалення змагання
+                confirmDelete(comp.id);
             });
-            actionTd.appendChild(deleteButton);  // Додає кнопку видалення до стовпчика дій
+            actionTd.appendChild(deleteButton);
         }
 
-        // Додаємо кожну комірку до рядка в правильному порядку
         tr.appendChild(idTd);
         tr.appendChild(nameTd);
         tr.appendChild(descriptionTd);
@@ -318,47 +258,45 @@ function createCompetitionElement(comp, userRole) {
         tr.appendChild(statusTd);
         tr.appendChild(actionTd);
 
-        return tr;  // Повертає створений рядок таблиці як результат функції
+        return tr;
     }
 }
 
-// Функція toggleDeleteButton перемикає видимість кнопки видалення.
 function toggleDeleteButton(deleteButton) {
     if (deleteButton.style.display === 'none') {
-        deleteButton.style.display = 'inline-block';  // Показує кнопку, якщо вона прихована
+        deleteButton.style.display = 'inline-block';
     } else {
-        deleteButton.style.display = 'none';  // Приховує кнопку, якщо вона показана
+        deleteButton.style.display = 'none';
     }
 }
 
-// Функція confirmDelete відкриває модальне вікно підтвердження видалення.
 function confirmDelete(compId) {
     const confirmDeleteButton = document.getElementById('confirmDeleteButton');
-    confirmDeleteButton.setAttribute('data-id', compId);  // Зберігає ID змагання для видалення
+    confirmDeleteButton.setAttribute('data-id', compId);
 
     const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
-    deleteConfirmationModal.show();  // Відкриває модальне вікно підтвердження видалення
+    deleteConfirmationModal.show();
 }
 
-// Функція deleteCompetition виконує запит на видалення змагання за його ID.
 function deleteCompetition() {
-    const compId = document.getElementById('confirmDeleteButton').getAttribute('data-id');  // Отримує ID змагання
+    const compId = document.getElementById('confirmDeleteButton').getAttribute('data-id');
 
-    fetch('http://localhost/php/deleteCompetition.php', {  // Виконує запит на сервер для видалення змагання
+    fetch('http://localhost/php/deleteCompetition.php', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `id=${compId}`,  // Передає ID у тілі запиту
+        body: `id=${compId}`,
     })
         .then(response => {
             if (response.ok) {
-                loadCompetitions();  // Якщо запит успішний, перезавантажує список змагань
+                loadCompetitions();
             } else {
-                console.error('Failed to delete competition');  // Виводить помилку у консолі, якщо не вдалося видалити змагання
+                console.error('Failed to delete competition');
             }
         })
         .catch(error => {
-            console.error('Error:', error);  // Виводить помилку у консолі при виникненні помилки запиту
+            console.error('Error:', error);
         });
 }
+
